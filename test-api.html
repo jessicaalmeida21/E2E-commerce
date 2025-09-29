@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste da API</title>
+</head>
+<body>
+    <h1>Teste da API de Produtos</h1>
+    <div id="results"></div>
+    
+    <script src="js/api-service.js"></script>
+    <script>
+        async function testAPI() {
+            const results = document.getElementById('results');
+            
+            try {
+                console.log('Iniciando teste da API...');
+                
+                // Criar instância do serviço
+                const apiService = new ApiService();
+                
+                // Testar busca de produtos
+                console.log('Testando busca de produtos...');
+                const productsResponse = await apiService.getProducts(1, 10);
+                console.log('Resposta dos produtos:', productsResponse);
+                
+                results.innerHTML += `
+                    <h2>Produtos (${productsResponse.products.length})</h2>
+                    <pre>${JSON.stringify(productsResponse, null, 2)}</pre>
+                `;
+                
+                // Testar busca de categorias
+                console.log('Testando busca de categorias...');
+                const categories = await apiService.getCategories();
+                console.log('Categorias:', categories);
+                
+                results.innerHTML += `
+                    <h2>Categorias (${categories.length})</h2>
+                    <pre>${JSON.stringify(categories, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Erro no teste:', error);
+                results.innerHTML += `<p style="color: red;">Erro: ${error.message}</p>`;
+            }
+        }
+        
+        // Executar teste quando a página carregar
+        document.addEventListener('DOMContentLoaded', testAPI);
+    </script>
+</body>
+</html>
